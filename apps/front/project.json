@@ -1,78 +1,45 @@
 {
   "name": "front",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "apps/front/src",
+  "sourceRoot": "apps/front",
   "projectType": "application",
   "targets": {
     "build": {
-      "executor": "@nx/webpack:webpack",
+      "executor": "@nx/next:build",
       "outputs": ["{options.outputPath}"],
       "defaultConfiguration": "production",
       "options": {
-        "compiler": "babel",
-        "outputPath": "dist/apps/front",
-        "index": "apps/front/src/index.html",
-        "baseHref": "/",
-        "main": "apps/front/src/main.tsx",
-        "tsConfig": "apps/front/tsconfig.app.json",
-        "assets": ["apps/front/src/favicon.ico", "apps/front/src/assets"],
-        "styles": ["apps/front/src/styles.scss"],
-        "scripts": [],
-        "isolatedConfig": true,
-        "webpackConfig": "apps/front/webpack.config.js"
+        "outputPath": "dist/apps/front"
       },
       "configurations": {
         "development": {
-          "extractLicenses": false,
-          "optimization": false,
-          "sourceMap": true,
-          "vendorChunk": true
+          "outputPath": "apps/front"
         },
-        "production": {
-          "fileReplacements": [
-            {
-              "replace": "apps/front/src/environments/environment.ts",
-              "with": "apps/front/src/environments/environment.prod.ts"
-            }
-          ],
-          "optimization": true,
-          "outputHashing": "all",
-          "sourceMap": false,
-          "namedChunks": false,
-          "extractLicenses": true,
-          "vendorChunk": false
-        }
+        "production": {}
       }
     },
     "serve": {
-      "executor": "@nx/webpack:dev-server",
+      "executor": "@nx/next:server",
       "defaultConfiguration": "development",
       "options": {
         "buildTarget": "front:build",
-        "hmr": true,
-        "proxyConfig": "apps/front/proxy.conf.json"
+        "dev": true
       },
       "configurations": {
         "development": {
-          "buildTarget": "front:build:development"
+          "buildTarget": "front:build:development",
+          "dev": true
         },
         "production": {
           "buildTarget": "front:build:production",
-          "hmr": false
+          "dev": false
         }
       }
     },
-    "lint": {
-      "executor": "@nx/linter:eslint",
-      "outputs": ["{options.outputFile}"],
+    "export": {
+      "executor": "@nx/next:export",
       "options": {
-        "lintFilePatterns": ["apps/front/**/*.{ts,tsx,js,jsx}"]
-      }
-    },
-    "serve-static": {
-      "executor": "@nx/web:file-server",
-      "options": {
-        "buildTarget": "front:build"
+        "buildTarget": "front:build:production"
       }
     },
     "test": {
@@ -87,6 +54,13 @@
           "ci": true,
           "codeCoverage": true
         }
+      }
+    },
+    "lint": {
+      "executor": "@nx/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/front/**/*.{ts,tsx,js,jsx}"]
       }
     }
   },

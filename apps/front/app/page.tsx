@@ -5,11 +5,10 @@ import axios from "axios";
 export default async function Index() {
 
   const { data } = await axios.get(
-     "https://official-joke-api.appspot.com/random_joke"
+     "http://localhost:3000/api/heroes"
    );
 
-  const setup = data.setup;
-  const punchline = data.punchline;
+  console.log(data)
 
   return (
     <div className={styles.page}>
@@ -18,8 +17,15 @@ export default async function Index() {
           <div id="welcome">
               <span> Hello there, </span>
               Welcome front asdc 👋
-              <h1>{setup}</h1>
-              <h1>{punchline}</h1>
+              <h1>{data.map((item) => {
+                return (
+                  <div key={item.id}>
+                    <h1>{item?.name}</h1>
+                    <h1>{item.id}</h1>
+                    <h1>{item.description}</h1>
+                  </div>
+                )
+              })}</h1>
           </div>
 
         </div>
